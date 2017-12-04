@@ -1,4 +1,7 @@
 import numpy as np
+import sys
+sys.path.append('../')
+
 import gym
 
 from keras.models import Sequential

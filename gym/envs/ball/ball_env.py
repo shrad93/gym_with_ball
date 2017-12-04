@@ -15,7 +15,7 @@ import scipy.misc
 import pdb
 
 config = configparser.ConfigParser()
-config.read('/mnt/c/Users/Shradha/Documents/SicunGao/gym/gym/envs/ball/config.ini')
+config.read('/mnt/c/Users/Shradha/Documents/SicunGao/gym_with_ball/gym/envs/ball/config.ini')
 
 
 class BallEnv(gym.Env):
