@@ -10,7 +10,7 @@ from video_sk import *  #or from video import * (if opencv works on your system)
 import configparser
 
 #import cv2
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import scipy.misc
 import pdb
 
@@ -91,15 +91,19 @@ class BallEnv(gym.Env):
 	def _reset(self):
 		#grab the very first frame the set enclosing window correctly
 		# self.count = 0
-		self.video.reset_playing()
-		self.count = 0
+		n_frames = 500
+		frame = None
+		
+		if self.count % n_frames == 0:
+			self.video.reset_playing()
+			self.count = 0
 
-		frame = self.video.grab_frame()
+			frame = self.video.grab_frame()
 
-		self.window_coordinates = convert_to_rect(self.coordinate_logs[self.count]) #initiallize with ground truth 
-		frame = self.video.draw_rect_frame(frame, self.window_coordinates)
+			self.window_coordinates = convert_to_rect(self.coordinate_logs[self.count]) #initiallize with ground truth 
+			frame = self.video.draw_rect_frame(frame, self.window_coordinates)
 
-		self.state = frame
+			self.state = frame
 
 		return frame
 
@@ -119,7 +123,7 @@ class BallEnv(gym.Env):
 			return 
 
 		#cv2.imshow('video', frame), if cv2 works on your system
-		plt.imshow(frame)
+		#plt.imshow(frame)
 
 		filepath = self.render_path+str(self.count)+'.jpg'
 		scipy.misc.imsave(filepath, frame)
