@@ -92,8 +92,7 @@ class BallEnv(gym.Env):
 		#grab the very first frame the set enclosing window correctly
 		# self.count = 0
 		n_frames = 500
-		frame = None
-		
+
 		if self.count % n_frames == 0:
 			self.video.reset_playing()
 			self.count = 0
@@ -105,7 +104,7 @@ class BallEnv(gym.Env):
 
 			self.state = frame
 
-		return frame
+		return self.state
 
 	def _reward(self, frame, window_coordinates):
 	
