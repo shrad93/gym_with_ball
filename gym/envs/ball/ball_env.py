@@ -56,42 +56,41 @@ class BallEnv(gym.Env):
 	def _step(self, action):
 		done = False
 		#since we are taking an action, we will grab the next frame from moving ball video
-		try:
-			next_frame = self.video.grab_frame()
+		
+		next_frame = self.video.grab_frame()
 
-			#In one unit of action in a frame, the shift would be velocity/fps
-			shift = self.velocity/self.fps
-			if action == 0: #up
-				self.window_coordinates.move_up(shift)
-			elif action == 1: #down
-				self.window_coordinates.move_down(shift)
-			elif action == 2: #left
-				self.window_coordinates.move_left(shift)
-			elif action == 3: #right
-				self.window_coordinates.move_right(shift)
-				
+		if next_frame is None: #video finished
+			next_frame = self._reset()
 
-			#draw this enclosing window on the frame grabbed above
-			observation = self.video.draw_rect_frame(next_frame, self.window_coordinates)
-			self.state = observation
+		#In one unit of action in a frame, the shift would be velocity/fps
+		shift = self.velocity/self.fps
+		if action == 0: #up
+			self.window_coordinates.move_up(shift)
+		elif action == 1: #down
+			self.window_coordinates.move_down(shift)
+		elif action == 2: #left
+			self.window_coordinates.move_left(shift)
+		elif action == 3: #right
+			self.window_coordinates.move_right(shift)
 			
-			self.count += 1
-			
-			reward = self._reward(next_frame, self.window_coordinates)
-			
-			if self.count % self.episode_length == 0:
-				done = True
 
-			return observation, reward, done, {}
-
-		except Exception, e:
-			print "in catch block"
+		#draw this enclosing window on the frame grabbed above
+		observation = self.video.draw_rect_frame(next_frame, self.window_coordinates)
+		self.state = observation
+		
+		self.count += 1
+		
+		reward = self._reward(next_frame, self.window_coordinates)
+		
+		if self.count % self.episode_length == 0:
 			done = True
+
+		return observation, reward, done, {}
 
 	def _reset(self):
 		#grab the very first frame the set enclosing window correctly
 		# self.count = 0
-		n_frames = 500
+		n_frames = self.video.get_num_frame()
 
 		if self.count % n_frames == 0:
 			self.video.reset_playing()

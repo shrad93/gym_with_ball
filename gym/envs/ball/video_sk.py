@@ -22,6 +22,9 @@ class Video:
 	def get_width(self):
 		return int(self.metadata['@width'])
 
+	def get_num_frame(self):
+		return int(self.metadata['@nb_frames'])
+
 	def reset_playing(self):
 		self.cap = skvideo.io.vreader(self.path)
 
@@ -38,9 +41,5 @@ class Video:
 
 	def grab_frame(self):
 		frame = next(self.cap, None)
-		if frame is not None:
-			return frame
-		else:
-			# if frame is None we stop
-			raise Exception("Video is finished.")
+		return frame
 		
